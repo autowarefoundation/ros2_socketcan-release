@@ -1,0 +1,12 @@
+Source: ros-foxy-ros2-socketcan
+Section: misc
+Priority: optional
+Maintainer: Josh Whitley <whitleysoftwareservices@gmail.com>
+Build-Depends: debhelper (>= 9.0.0), ros-foxy-ament-cmake-auto, ros-foxy-ament-cmake-gtest, ros-foxy-ament-lint-auto, ros-foxy-ament-lint-common, ros-foxy-can-msgs, ros-foxy-lifecycle-msgs, ros-foxy-rclcpp, ros-foxy-rclcpp-components, ros-foxy-rclcpp-lifecycle, ros-foxy-ros-workspace
+Homepage: 
+Standards-Version: 3.9.2
+
+Package: ros-foxy-ros2-socketcan
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}, ros-foxy-can-msgs, ros-foxy-lifecycle-msgs, ros-foxy-rclcpp, ros-foxy-rclcpp-components, ros-foxy-rclcpp-lifecycle, ros-foxy-ros-workspace
+Description: Simple wrapper around SocketCAN
