@@ -1,3 +1,26 @@
+## ros2_socketcan (galactic) - 1.1.0-1
+
+The packages in the `ros2_socketcan` repository were released into the `galactic` distro by running `/usr/bin/bloom-release --track galactic --ros-distro galactic --override-release-repository-url https://github.com/ros2-gbp/ros2_socketcan-release.git --override-release-repository-push-url git@github.com:ros2-gbp/ros2_socketcan-release.git ros2_socketcan` on `Tue, 08 Feb 2022 00:13:32 -0000`
+
+The `ros2_socketcan` package was released.
+
+Version of package(s) in repository `ros2_socketcan`:
+
+- upstream repository: https://github.com/autowarefoundation/ros2_socketcan.git
+- release repository: https://github.com/ros2-gbp/ros2_socketcan-release.git
+- rosdistro version: `1.0.0-2`
+- old version: `1.0.0-2`
+- new version: `1.1.0-1`
+
+Versions of tools used:
+
+- bloom version: `0.10.7`
+- catkin_pkg version: `0.4.23`
+- rosdep version: `0.21.0`
+- rosdistro version: `0.8.3`
+- vcstools version: `0.1.42`
+
+
 ## ros2_socketcan (foxy) - 1.1.0-1
 
 The packages in the `ros2_socketcan` repository were released into the `foxy` distro by running `/usr/bin/bloom-release --track foxy --ros-distro foxy --override-release-repository-url https://github.com/ros2-gbp/ros2_socketcan-release.git --override-release-repository-push-url git@github.com:ros2-gbp/ros2_socketcan-release.git ros2_socketcan` on `Tue, 08 Feb 2022 00:11:39 -0000`
