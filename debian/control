@@ -1,0 +1,12 @@
+Source: ros-iron-ros2-socketcan-msgs
+Section: misc
+Priority: optional
+Maintainer: Josh Whitley <josh@electrifiedautonomy.com>
+Build-Depends: debhelper (>= 9.0.0), ros-iron-ament-cmake-auto, ros-iron-ament-lint-auto <!nocheck>, ros-iron-ament-lint-common <!nocheck>, ros-iron-rosidl-default-generators, ros-iron-std-msgs, ros-iron-ros-workspace, ros-iron-rosidl-typesupport-fastrtps-c, ros-iron-rosidl-typesupport-fastrtps-cpp
+Homepage: 
+Standards-Version: 3.9.2
+
+Package: ros-iron-ros2-socketcan-msgs
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}, ros-iron-rosidl-default-runtime, ros-iron-std-msgs, ros-iron-ros-workspace
+Description: Messages for SocketCAN
