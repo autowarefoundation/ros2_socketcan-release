@@ -27,6 +27,9 @@
 
 #include <cstring>
 #include <string>
+#include <sstream>
+#include <vector>
+#include <cstdio>
 
 namespace drivers
 {
@@ -34,8 +37,9 @@ namespace socketcan
 {
 
 ////////////////////////////////////////////////////////////////////////////////
-SocketCanReceiver::SocketCanReceiver(const std::string & interface)
-: m_file_descriptor{bind_can_socket(interface)}
+SocketCanReceiver::SocketCanReceiver(const std::string & interface, const bool enable_fd)
+: m_file_descriptor{bind_can_socket(interface, enable_fd)},
+  m_enable_fd(enable_fd)
 {
 }
 
@@ -44,6 +48,66 @@ SocketCanReceiver::~SocketCanReceiver() noexcept
 {
   // Can't do anything on error; in fact generally shouldn't on close() error
   (void)close(m_file_descriptor);
+}
+
+////////////////////////////////////////////////////////////////////////////////
+SocketCanReceiver::CanFilterList::CanFilterList(const char * str)
+{
+  *this = ParseFilters(str);
+}
+
+////////////////////////////////////////////////////////////////////////////////
+SocketCanReceiver::CanFilterList::CanFilterList(const std::string & str)
+{
+  *this = ParseFilters(str);
+}
+
+////////////////////////////////////////////////////////////////////////////////
+SocketCanReceiver::CanFilterList SocketCanReceiver::CanFilterList::ParseFilters(
+  const std::string & str)
+{
+  CanFilterList filter_list;
+  filter_list.error_mask = 0;
+  filter_list.join_filters = false;
+
+  std::istringstream input(str);
+  std::string fstr;
+
+  while (getline(input, fstr, ',')) {
+    // trim leading and trailing whitespaces
+    fstr = fstr.substr(
+      fstr.find_first_not_of(" \t"),
+      fstr.find_last_not_of(" \t") - fstr.find_first_not_of(" \t") + 1);
+
+    struct can_filter filter;
+    if (std::sscanf(fstr.c_str(), "%x:%x", &filter.can_id, &filter.can_mask) == 2) {
+      filter.can_mask &= ~CAN_ERR_FLAG;
+      if (fstr.size() > 8 && fstr[8] == ':') {
+        filter.can_id |= CAN_EFF_FLAG;
+      }
+      filter_list.filters.push_back(filter);
+    } else if (std::sscanf(fstr.c_str(), "%x~%x", &filter.can_id, &filter.can_mask) == 2) {
+      filter.can_id |= CAN_INV_FILTER;
+      filter.can_mask &= ~CAN_ERR_FLAG;
+      if (fstr.size() > 8 && fstr[8] == '~') {
+        filter.can_id |= CAN_EFF_FLAG;
+      }
+      filter_list.filters.push_back(filter);
+    } else if (fstr == "j" || fstr == "J") {
+      filter_list.join_filters = true;
+    } else if (std::sscanf(fstr.c_str(), "#%x", &filter_list.error_mask) != 1) {
+      throw std::runtime_error("Error during filter parsing: " + fstr);
+    }
+  }
+  return filter_list;
+}
+
+////////////////////////////////////////////////////////////////////////////////
+void SocketCanReceiver::SetCanFilters(const CanFilterList & filters)
+{
+  set_can_filter(m_file_descriptor, filters.filters);
+  set_can_err_filter(m_file_descriptor, filters.error_mask);
+  set_can_filter_join(m_file_descriptor, filters.join_filters);
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -66,6 +130,10 @@ void SocketCanReceiver::wait(const std::chrono::nanoseconds timeout) const
 ////////////////////////////////////////////////////////////////////////////////
 CanId SocketCanReceiver::receive(void * const data, const std::chrono::nanoseconds timeout) const
 {
+  if (m_enable_fd) {
+    throw std::runtime_error{"attempted to read standard frame from FD socket"};
+  }
+
   wait(timeout);
   // Read
   struct can_frame frame;
@@ -82,6 +150,39 @@ CanId SocketCanReceiver::receive(void * const data, const std::chrono::nanosecon
   }
   // Write
   const auto data_length = static_cast<CanId::LengthT>(frame.can_dlc);
+  (void)std::memcpy(data, static_cast<void *>(&frame.data[0U]), data_length);
+
+  // get bus timestamp
+  struct timeval tv;
+  ioctl(m_file_descriptor, SIOCGSTAMP, &tv);
+  uint64_t bus_time = from_timeval(tv);
+
+  return CanId{frame.can_id, bus_time, data_length};
+}
+
+////////////////////////////////////////////////////////////////////////////////
+CanId SocketCanReceiver::receive_fd(void * const data, const std::chrono::nanoseconds timeout) const
+{
+  if (!m_enable_fd) {
+    throw std::runtime_error{"attempted to read FD frame from standard socket"};
+  }
+
+  wait(timeout);
+  // Read
+  struct canfd_frame frame;
+  const auto nbytes = read(m_file_descriptor, &frame, sizeof(frame));
+  // Checks
+  if (nbytes < 0) {
+    throw std::runtime_error{strerror(errno)};
+  }
+  if (static_cast<std::size_t>(nbytes) < sizeof(frame)) {
+    throw std::runtime_error{"read: incomplete CAN FD frame"};
+  }
+  if (static_cast<std::size_t>(nbytes) != sizeof(frame)) {
+    throw std::logic_error{"Message was wrong size"};
+  }
+  // Write
+  const auto data_length = static_cast<CanId::LengthT>(frame.len);
   (void)std::memcpy(data, static_cast<void *>(&frame.data[0U]), data_length);
 
   // get bus timestamp
