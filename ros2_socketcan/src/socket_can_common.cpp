@@ -29,6 +29,7 @@
 #include <cstring>
 #include <stdexcept>
 #include <string>
+#include <vector>
 
 namespace drivers
 {
@@ -36,7 +37,7 @@ namespace socketcan
 {
 
 ////////////////////////////////////////////////////////////////////////////////
-int32_t bind_can_socket(const std::string & interface)
+int32_t bind_can_socket(const std::string & interface, bool enable_fd)
 {
   if (interface.length() >= static_cast<std::string::size_type>(IFNAMSIZ)) {
     throw std::domain_error{"CAN interface name too long"};
@@ -72,7 +73,56 @@ int32_t bind_can_socket(const std::string & interface)
   }
   //lint -restore NOLINT
 
+  // Enable CAN FD support
+  const int32_t enable_canfd = enable_fd ? 1 : 0;
+  if (0 !=
+    setsockopt(
+      file_descriptor, SOL_CAN_RAW, CAN_RAW_FD_FRAMES, &enable_canfd,
+      sizeof(enable_canfd)))
+  {
+    throw std::runtime_error{"Failed to enable CAN FD support"};
+  }
+
   return file_descriptor;
+}
+
+////////////////////////////////////////////////////////////////////////////////
+void set_can_filter(int32_t fd, const std::vector<struct can_filter> & f_list)
+{
+  if (0 !=
+    setsockopt(
+      fd, SOL_CAN_RAW, CAN_RAW_FILTER, f_list.empty() ? NULL : f_list.data(),
+      sizeof(can_filter) * f_list.size()))
+  {
+    throw std::runtime_error{"Failed to set up CAN filters: " + std::string{strerror(errno)}};
+  }
+}
+
+////////////////////////////////////////////////////////////////////////////////
+void set_can_err_filter(int32_t fd, can_err_mask_t err_mask)
+{
+  if (0 !=
+    setsockopt(
+      fd, SOL_CAN_RAW, CAN_RAW_ERR_FILTER, &err_mask,
+      sizeof(err_mask)))
+  {
+    throw std::runtime_error{"Failed to set up CAN error filters: " +
+            std::string{strerror(errno)}};
+  }
+}
+
+////////////////////////////////////////////////////////////////////////////////
+void set_can_filter_join(int32_t fd, bool join_filters)
+{
+  auto join = static_cast<int>(join_filters);
+  if (0 !=
+    setsockopt(
+      fd, SOL_CAN_RAW, CAN_RAW_JOIN_FILTERS, &join,
+      sizeof(join)))
+  {
+    throw std::runtime_error{"Failed to set up joined CAN filters: " +
+            std::string{strerror(errno)}};
+  }
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -82,7 +132,7 @@ struct timeval to_timeval(const std::chrono::nanoseconds timeout) noexcept
   constexpr auto BILLION = 1'000'000'000LL;
   struct timeval c_timeout;
   c_timeout.tv_sec = static_cast<decltype(c_timeout.tv_sec)>(count / BILLION);
-  c_timeout.tv_usec = static_cast<decltype(c_timeout.tv_usec)>((count % BILLION) * 1000LL);
+  c_timeout.tv_usec = static_cast<decltype(c_timeout.tv_usec)>((count % BILLION) / 1000LL);
 
   return c_timeout;
 }
