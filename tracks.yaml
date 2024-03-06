@@ -129,4 +129,5 @@ tracks:
     ros_distro: rolling
     vcs_type: git
     vcs_uri: https://github.com/autowarefoundation/ros2_socketcan.git
-    version: :{auto}
+    version: 1.2.0
+    version_saved: :{auto}
