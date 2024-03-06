@@ -123,7 +123,7 @@ tracks:
     last_version: 1.2.0
     name: upstream
     patches: null
-    release_inc: '1'
+    release_inc: '2'
     release_repo_url: https://github.com/ros2-gbp/ros2_socketcan-release.git
     release_tag: :{version}
     ros_distro: rolling
