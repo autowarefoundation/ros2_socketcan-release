@@ -72,7 +72,7 @@ tracks:
     name: upstream
     patches: null
     release_inc: '3'
-    release_repo_url: git@github.com:autowarefoundation/ros2_socketcan-release.git
+    release_repo_url: null
     release_tag: :{version}
     ros_distro: humble
     vcs_type: git
