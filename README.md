@@ -1,3 +1,28 @@
+## ros2_socketcan (iron) - 1.3.0-1
+
+The packages in the `ros2_socketcan` repository were released into the `iron` distro by running `/usr/bin/bloom-release --rosdistro iron ros2_socketcan` on `Tue, 16 Jul 2024 18:49:30 -0000`
+
+These packages were released:
+- `ros2_socketcan`
+- `ros2_socketcan_msgs`
+
+Version of package(s) in repository `ros2_socketcan`:
+
+- upstream repository: https://github.com/autowarefoundation/ros2_socketcan.git
+- release repository: https://github.com/ros2-gbp/ros2_socketcan-release.git
+- rosdistro version: `1.2.0-1`
+- old version: `1.2.0-1`
+- new version: `1.3.0-1`
+
+Versions of tools used:
+
+- bloom version: `0.12.0`
+- catkin_pkg version: `1.0.0`
+- rosdep version: `0.24.0`
+- rosdistro version: `0.9.1`
+- vcstools version: `0.1.42`
+
+
 ## ros2_socketcan (jazzy) - 1.3.0-1
 
 The packages in the `ros2_socketcan` repository were released into the `jazzy` distro by running `/usr/bin/bloom-release --rosdistro jazzy ros2_socketcan` on `Tue, 16 Jul 2024 18:42:06 -0000`
