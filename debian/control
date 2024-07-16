@@ -1,0 +1,12 @@
+Source: ros-humble-ros2-socketcan
+Section: misc
+Priority: optional
+Maintainer: Josh Whitley <whitleysoftwareservices@gmail.com>
+Build-Depends: debhelper (>= 9.0.0), ros-humble-ament-cmake-auto, ros-humble-ament-cmake-gtest <!nocheck>, ros-humble-ament-lint-auto <!nocheck>, ros-humble-ament-lint-common <!nocheck>, ros-humble-can-msgs, ros-humble-lifecycle-msgs, ros-humble-rclcpp, ros-humble-rclcpp-components, ros-humble-rclcpp-lifecycle, ros-humble-ros2-socketcan-msgs, ros-humble-ros-workspace
+Homepage: 
+Standards-Version: 3.9.2
+
+Package: ros-humble-ros2-socketcan
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}, ros-humble-can-msgs, ros-humble-lifecycle-msgs, ros-humble-rclcpp, ros-humble-rclcpp-components, ros-humble-rclcpp-lifecycle, ros-humble-ros2-socketcan-msgs, ros-humble-ros-workspace
+Description: Simple wrapper around SocketCAN
