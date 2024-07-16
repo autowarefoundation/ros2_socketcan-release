@@ -1,0 +1,56 @@
+ros-humble-ros2-socketcan-msgs (1.3.0-1jammy) jammy; urgency=high
+
+  * Jazzy release
+
+ -- Josh Whitley <josh@electrifiedautonomy.com>  Mon, 15 Jul 2024 21:00:00 -0000
+
+ros-humble-ros2-socketcan-msgs (1.2.0-1jammy) jammy; urgency=high
+
+  * Add CAN FD Support (#28 <https://github.com/autowarefoundation/ros2_socketcan/issues/28>)
+    * Add FD support to ROS2 interface.
+    * Add FD send/receive.
+    * Missed some fields in Frame msg.
+    * Make standard and FD mutually exclusive.
+    * Enable runtime checks for standard vs FD.
+    * Try to minimize API changes.
+    * Fix receive_id/fd_receive_id mix-up.
+    * Make new message FD-specific.
+    * Use FdFrame message.
+    * Remove unused functions.
+    * Always resize fd frame buffer to 64 before receive.
+    * Add enable_can_fd to socket_can_bridge.launch.xml.
+    ---------
+  * Adding ros2_socketcan_msgs (#26 <https://github.com/autowarefoundation/ros2_socketcan/issues/26>)
+  * Contributors: Joshua Whitley
+  * Add CAN FD Support (#28 <https://github.com/autowarefoundation/ros2_socketcan/issues/28>)
+    * Add FD support to ROS2 interface.
+    * Add FD send/receive.
+    * Missed some fields in Frame msg.
+    * Make standard and FD mutually exclusive.
+    * Enable runtime checks for standard vs FD.
+    * Try to minimize API changes.
+    * Fix receive_id/fd_receive_id mix-up.
+    * Make new message FD-specific.
+    * Use FdFrame message.
+    * Remove unused functions.
+    * Always resize fd frame buffer to 64 before receive.
+    * Add enable_can_fd to socket_can_bridge.launch.xml.
+    ---------
+  * Adding ros2_socketcan_msgs (#26 <https://github.com/autowarefoundation/ros2_socketcan/issues/26>)
+  * Contributors: Joshua Whitley
+
+ -- Josh Whitley <josh@electrifiedautonomy.com>  Thu, 02 Mar 2023 21:00:00 -0000
+
+ros-humble-ros2-socketcan-msgs (1.1.0-1jammy) jammy; urgency=high
+
+
+
+ -- Josh Whitley <josh@electrifiedautonomy.com>  Wed, 02 Feb 2022 21:00:00 -0000
+
+ros-humble-ros2-socketcan-msgs (1.0.0-1jammy) jammy; urgency=high
+
+
+
+ -- Josh Whitley <josh@electrifiedautonomy.com>  Wed, 31 Mar 2021 21:00:00 -0000
+
+
