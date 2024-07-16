@@ -1,3 +1,11 @@
+# Archive Announcement
+
+This repository has moved to https://github.com/ros2-gbp/ros2_socketcan-release at some time during `humble` release.
+
+Currently, `humble` and newer distros are handled in the new repository.
+
+This repository will stay only for historical purposes for `galactic` and older distros.
+
 ## ros2_socketcan (humble) - 1.3.0-1
 
 The packages in the `ros2_socketcan` repository were released into the `humble` distro by running `/usr/bin/bloom-release --rosdistro humble ros2_socketcan` on `Tue, 16 Jul 2024 19:57:30 -0000`
