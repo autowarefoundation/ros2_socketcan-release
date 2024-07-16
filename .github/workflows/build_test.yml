@@ -13,20 +13,25 @@ jobs:
       fail-fast: false
       matrix:
         ros_distribution:
-          - foxy
-          - galactic
+          - humble
+          - iron
+          - jazzy
           - rolling
         include:
-          # Foxy Fitzroy (June 2020 - May 2023)
-          - docker_image: rostooling/setup-ros-docker:ubuntu-focal-ros-foxy-ros-base-latest
-            ros_distribution: foxy
+          # Humble Hawksbill (May 2022 - May 2027)
+          - docker_image: rostooling/setup-ros-docker:ubuntu-jammy-ros-humble-ros-base-latest
+            ros_distribution: humble
             ros_version: 2
-          # Galactic Geochelone (May 2021 - November 2022)
-          - docker_image: rostooling/setup-ros-docker:ubuntu-focal-ros-galactic-ros-base-latest
-            ros_distribution: galactic
+          # Iron Irwini (May 2023 - November 2024)
+          - docker_image: rostooling/setup-ros-docker:ubuntu-jammy-ros-iron-ros-base-latest
+            ros_distribution: iron
+            ros_version: 2
+          # Jazzy Jalisco (May 2024 - May 2029)
+          - docker_image: rostooling/setup-ros-docker:ubuntu-noble-ros-jazzy-ros-base-latest
+            ros_distribution: jazzy
             ros_version: 2
           # Rolling Ridley  (June 2020 - Present)
-          - docker_image: rostooling/setup-ros-docker:ubuntu-focal-ros-rolling-ros-base-latest
+          - docker_image: rostooling/setup-ros-docker:ubuntu-noble-ros-rolling-ros-base-latest
             ros_distribution: rolling
             ros_version: 2
     container:
@@ -41,6 +46,6 @@ jobs:
       - name: build and test
         uses: ros-tooling/action-ros-ci@master
         with:
-          package-name: ros2_socketcan
+          package-name: ros2_socketcan ros2_socketcan_msgs
           target-ros2-distro: ${{ matrix.ros_distribution }}
           vcs-repo-file-url: ""
